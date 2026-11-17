@@ -3,7 +3,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 /**
- * A simple console application for managing employee records.
+ * A console application for managing employee records.
  * Compile with: javac EmployeeManagement.java
  * Run with:     java EmployeeManagement
  */
@@ -18,9 +18,11 @@ public class EmployeeManagement {
             System.out.println("1. Add employee");
             System.out.println("2. Display employees");
             System.out.println("3. Search employee by ID");
-            System.out.println("4. Exit");
-            int choice = readInt("Choose an option: ");
+            System.out.println("4. Update employee");
+            System.out.println("5. Delete employee");
+            System.out.println("6. Exit");
 
+            int choice = readInt("Choose an option: ");
             switch (choice) {
                 case 1:
                     addEmployee();
@@ -32,11 +34,17 @@ public class EmployeeManagement {
                     searchEmployee();
                     break;
                 case 4:
+                    updateEmployee();
+                    break;
+                case 5:
+                    deleteEmployee();
+                    break;
+                case 6:
                     running = false;
                     System.out.println("Goodbye!");
                     break;
                 default:
-                    System.out.println("Invalid option. Please choose 1–4.");
+                    System.out.println("Invalid option. Please choose 1–6.");
             }
         }
         scanner.close();
@@ -57,7 +65,6 @@ public class EmployeeManagement {
         String name = readNonEmpty("Name: ");
         String department = readNonEmpty("Department: ");
         double salary = readNonNegativeDouble("Salary: ");
-
         employees.put(id, new Employee(id, name, department, salary));
         System.out.println("Employee added successfully.");
     }
@@ -82,6 +89,34 @@ public class EmployeeManagement {
             System.out.println("No employee found with ID " + id + ".");
         } else {
             printEmployee(employee);
+        }
+    }
+
+    private static void updateEmployee() {
+        System.out.print("Enter employee ID to update: ");
+        String id = scanner.nextLine().trim();
+        Employee employee = employees.get(id);
+        if (employee == null) {
+            System.out.println("No employee found with ID " + id + ".");
+            return;
+        }
+
+        System.out.println("Enter the updated details:");
+        String name = readNonEmpty("Name: ");
+        String department = readNonEmpty("Department: ");
+        double salary = readNonNegativeDouble("Salary: ");
+        employees.put(id, new Employee(id, name, department, salary));
+        System.out.println("Employee updated successfully.");
+    }
+
+    private static void deleteEmployee() {
+        System.out.print("Enter employee ID to delete: ");
+        String id = scanner.nextLine().trim();
+        Employee removed = employees.remove(id);
+        if (removed == null) {
+            System.out.println("No employee found with ID " + id + ".");
+        } else {
+            System.out.println("Employee " + id + " deleted successfully.");
         }
     }
 
@@ -123,7 +158,7 @@ public class EmployeeManagement {
                     return salary;
                 }
             } catch (NumberFormatException ignored) {
-                // Print the common validation message below.
+                // Show the common validation message below.
             }
             System.out.println("Enter a valid, non-negative salary.");
         }
